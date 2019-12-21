@@ -41,6 +41,16 @@ class EchoTestCase(unittest.TestCase):
             "expected {0}, got {1}".format(expected, actual)
         )
 
+    def test_exact_length_message_echo(self):
+        """test that a message exactly 16 bytes in length echoes in 16-byte chunks"""
+        expected = "Test exact bytes"
+        actual = self.send_message(expected)
+        self.assertEqual(
+            expected,
+            actual,
+            "expected {0}, got {1}".format(expected, actual)
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

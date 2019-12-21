@@ -39,11 +39,11 @@ def server(log_buffer=sys.stderr):
                     data = conn.recv(BYTES)
                     print('received "{0}"'.format(data.decode('utf8')))
                     # Send the data back to the client, and log it
-                    conn.sendall(data)
-                    print('sent "{0}"'.format(data.decode('utf8')))
-                    print('Size of chunk {:d}'.format(len(data)))
-                    # Check for the end of the message. Break if so.
-                    if len(data) < BYTES:
+                    if data:
+                        conn.sendall(data)
+                        print('sent "{0}"'.format(data.decode('utf8')))
+                    else: # Break if message is empty
+                        print('no data received, closing connection')
                         break
             except Exception as e:
                 traceback.print_exc()

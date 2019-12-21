@@ -23,18 +23,20 @@ def client(msg, log_buffer=sys.stderr):
         print('sending "{0}"'.format(msg), file=log_buffer)
         sock.sendall(msg.encode('utf-8'))
 
-        # Accumulate 16 byte chunks of reply from the server. Exit loop
-        # once entire message has been received
-        # Log each chunk received
-        while True:
-            chunk = sock.recv(BYTES)
-            if chunk:
-                received_message += chunk.decode('utf-8')
-            else: # If no data received, break loop
-                print('received nothing, exiting')
-                break
-            print('received "{0}"'.format(chunk.decode('utf8')), file=log_buffer)
+        # Since length of message is known, we can keep track of bytes
+        # received to know when we've received full message back
+        received = 0
+        expected = len(msg)
 
+        # Accumulate 16 byte chunks of reply from the server. Exit loop
+        # once entire message has been received. Log each chunk received
+        
+        # Repeat loop as long as there's more data to collect from server
+        while received < expected:
+            chunk = sock.recv(BYTES)
+            received += len(chunk)
+            received_message += chunk.decode('utf-8')
+            print('received "{0}"'.format(chunk.decode('utf8')), file=log_buffer)
     except Exception as e:
         traceback.print_exc()
         sys.exit(1)
