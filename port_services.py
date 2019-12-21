@@ -12,7 +12,7 @@ def print_port_ranges(lower=0, upper=10):
         lower (int):
             Lower bound (default = 0)
         upper (int):
-            Upper bound (default = 100)
+            Upper bound (default = 10)
 
     Returns:
         None
